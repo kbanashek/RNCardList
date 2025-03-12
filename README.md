@@ -3,13 +3,16 @@
 A React Native app built with Expo and React Relay for managing a collection of baseball cards. Users can view cards, see detailed information, and like their favorite cards.
 
 ## Features
+
 - View list of baseball cards
 - Card details view
 - Like/unlike cards
 - Smooth navigation
 - Optimistic UI updates
+- Offline capabilities
 
 ## Tech Stack
+
 - React Native
 - Expo
 - React Relay
@@ -32,11 +35,13 @@ A React Native app built with Expo and React Relay for managing a collection of 
 ## Getting Started
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Start the development server:
+
 ```bash
 npx expo start
 ```
