@@ -10,10 +10,15 @@ interface Card {
   isLiked?: boolean;
 }
 
-const fetchQuery = async (operation: any, variables: any) => {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
+// Create a RecordSource instance that will be used for caching
+const recordSource = new RecordSource();
 
+// Initialize the Relay store with caching enabled
+const store = new Store(recordSource, {
+  gcReleaseBufferSize: 10, // Keep more records in memory
+});
+
+const fetchQuery = async (operation: any, variables: any) => {
   // Mock response based on operation
   switch (operation.name) {
     case "GetCardsQuery":
@@ -54,7 +59,15 @@ const network = Network.create(fetchQuery);
 
 const environment = new Environment({
   network,
-  store: new Store(new RecordSource()),
+  store,
+  // Enable query caching
+  options: {
+    fetchTimeout: 30000, // 30 second timeout
+    subscriptionResponseCacheConfig: {
+      size: 250, // Cache size
+      ttl: 60 * 60 * 1000, // 1 hour
+    },
+  },
 });
 
 export default environment;

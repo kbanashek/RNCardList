@@ -5,8 +5,10 @@ import { RelayEnvironmentProvider } from "react-relay";
 import { RootStack } from "./src/navigation";
 import environment from "./src/relay/environment";
 import { StatusBar } from "expo-status-bar";
-// import { preloadImages } from "./src/assets/images";
-import { Platform, UIManager } from "react-native";
+import { preloadImages } from "./src/assets/images";
+import { Platform, UIManager, View } from "react-native";
+import { NetworkStatus } from "./src/components/NetworkStatus";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Enable LayoutAnimation for Android
 if (Platform.OS === "android") {
@@ -16,14 +18,23 @@ if (Platform.OS === "android") {
 }
 
 export default function App() {
+  useEffect(() => {
+    preloadImages();
+  }, []);
+
   return (
     <RelayEnvironmentProvider environment={environment}>
-      <PaperProvider theme={MD3LightTheme}>
-        <NavigationContainer>
-          <RootStack />
-          <StatusBar style="auto" />
-        </NavigationContainer>
-      </PaperProvider>
+      <SafeAreaProvider>
+        <PaperProvider theme={MD3LightTheme}>
+          <View style={{ flex: 1 }}>
+            <NavigationContainer>
+              <RootStack />
+            </NavigationContainer>
+            <NetworkStatus />
+            <StatusBar style="auto" />
+          </View>
+        </PaperProvider>
+      </SafeAreaProvider>
     </RelayEnvironmentProvider>
   );
 }
