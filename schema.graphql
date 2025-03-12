@@ -1,0 +1,39 @@
+enum ImageKey {
+  griffey
+  jeter
+  sosa
+  jones
+  ripken
+}
+
+type Card {
+  id: ID!
+  name: String!
+  year: Int!
+  team: String!
+  description: String!
+  imageKey: ImageKey!
+  isLiked: Boolean!
+}
+
+input ToggleCardLikeInput {
+  cardId: ID!
+}
+
+type ToggleCardLikePayload {
+  card: Card
+}
+
+type Mutation {
+  toggleCardLike(input: ToggleCardLikeInput!): ToggleCardLikePayload!
+}
+
+type Query {
+  card(id: ID!): Card
+  cards: [Card!]!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
