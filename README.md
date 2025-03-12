@@ -2,6 +2,14 @@
 
 A React Native app built with Expo and React Relay for managing a collection of baseball cards. Users can view cards, see detailed information, and like their favorite cards.
 
+## List Screen:
+
+![alt text](image.png)
+
+## Detail Screen:
+
+![alt text](image-1.png)
+
 ## Features
 
 - View list of baseball cards

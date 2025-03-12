@@ -93,16 +93,21 @@ export const CardList: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f8f9fa",
   },
   centered: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   listContent: {
-    paddingVertical: 8,
+    paddingVertical: 12,
+    paddingBottom: 32,
   },
   error: {
     color: "#d32f2f",
+    fontSize: 16,
+    textAlign: 'center',
+    marginHorizontal: 20,
   },
 });

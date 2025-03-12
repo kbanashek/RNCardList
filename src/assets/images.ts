@@ -3,38 +3,40 @@ import { Image, ImageSourcePropType } from "react-native";
 // Define the available baseball card images
 export const Images = {
   griffey: require("./images/griffey.jpg"),
-  jeter: require("./images/griffey.jpg"), // Using Griffey image as placeholder
-  sosa: require("./images/griffey.jpg"), // Using Griffey image as placeholder
-  jones: require("./images/griffey.jpg"), // Using Griffey image as placeholder
-  ripken: require("./images/griffey.jpg"), // Using Griffey image as placeholder
+  jeter: require("./images/jeter.jpg"),
+  sosa: require("./images/sosa.jpg"),
+  jones: require("./images/jones.jpg"),
+  ripken: require("./images/ripken.jpg"),
 } as const;
 
-// Define valid image keys
 export type CardImageKey = keyof typeof Images;
 
 // Preload all images for better performance
 export const preloadImages = () => {
-  Object.values(Images).forEach(image => {
-    if (typeof image === 'number') {
+  Object.values(Images).forEach((image) => {
+    if (typeof image === "number") {
       Image.prefetch(Image.resolveAssetSource(image).uri);
     }
   });
 };
 
-// Cache for resolved image sources to improve memory usage
-const imageCache: Record<CardImageKey, ImageSourcePropType> = {} as Record<CardImageKey, ImageSourcePropType>;
+const imageCache: Record<CardImageKey, ImageSourcePropType> = {} as Record<
+  CardImageKey,
+  ImageSourcePropType
+>;
 
-// Helper function to get image source with caching
 export const getImage = (key: CardImageKey | string): ImageSourcePropType => {
-  const validKey = key in Images ? (key as CardImageKey) : 'griffey';
-  
-  // Return cached resolved source if available
-  if (imageCache[validKey]) {
-    return imageCache[validKey];
+  if (key in Images) {
+    const validKey = key as CardImageKey;
+
+    if (imageCache[validKey]) {
+      return imageCache[validKey];
+    }
+
+    const source = Images[validKey];
+    imageCache[validKey] = source;
+    return source;
   }
 
-  // Resolve and cache the source
-  const source = Images[validKey];
-  imageCache[validKey] = source;
-  return source;
+  return Images.griffey;
 };
