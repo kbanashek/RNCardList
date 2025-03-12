@@ -17,6 +17,18 @@ A React Native app built with Expo and React Relay for managing a collection of 
 - React Navigation
 - React Native Paper
 
+## Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+- iOS Simulator (for iOS development)
+  - macOS
+  - Xcode (latest version)
+- Android Studio (for Android development)
+  - Android SDK
+  - Android Emulator
+- Expo Go app (for testing on physical devices)
+
 ## Getting Started
 
 1. Install dependencies:
