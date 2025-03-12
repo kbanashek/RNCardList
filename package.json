@@ -24,7 +24,8 @@
     "react-native-screens": "^4.9.2",
     "react-native-vector-icons": "^10.2.0",
     "react-relay": "^18.2.0",
-    "relay-runtime": "^18.2.0"
+    "relay-runtime": "^18.2.0",
+    "expo-dev-client": "~5.0.13"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
