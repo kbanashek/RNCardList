@@ -7,12 +7,8 @@ import type { HomeScreenProps } from "../../navigation/types";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RouteProp } from "@react-navigation/native";
 import type { RootStackParamList } from "../../navigation/types";
+import { mockNavigate } from "../../../jest.setup";
 
-// Get the mock functions from the CardList mock
-const { __mockOnCardPress } = jest.requireMock("../../components/CardList");
-
-// Create mock navigation and route props
-const mockNavigate = jest.fn();
 const mockGoBack = jest.fn();
 
 const mockNavigation: Partial<
@@ -37,10 +33,8 @@ const mockProps: HomeScreenProps = {
 
 describe("CardListScreen", () => {
   beforeEach(() => {
-    // Reset all mocks before each test
     mockNavigate.mockReset();
     mockGoBack.mockReset();
-    __mockOnCardPress.mockReset();
   });
 
   it("renders without crashing", () => {

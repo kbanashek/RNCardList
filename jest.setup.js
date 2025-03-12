@@ -7,9 +7,10 @@ jest.mock('react-native-safe-area-context', () => ({
 }));
 
 // Mock navigation
+export const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
-    navigate: jest.fn(),
+    navigate: mockNavigate,
   }),
 }));
 
@@ -19,11 +20,23 @@ jest.mock('react-relay', () => ({
   useLazyLoadQuery: jest.fn(),
 }));
 
+// Mock CardItem component
+jest.mock('./src/components/shared/CardItem', () => {
+  const React = require('react');
+  const { TouchableOpacity } = require('react-native');
+
+  return {
+    CardItem: ({ item }) => (
+      <TouchableOpacity testID="card-item" onPress={() => mockNavigate('Detail', { cardId: item.id })} />
+    ),
+  };
+});
+
 // Mock CardList component
 jest.mock('./src/components/CardList', () => {
   const React = require('react');
-  const { View, TouchableOpacity } = require('react-native');
-  const mockOnCardPress = jest.fn();
+  const { View } = require('react-native');
+  const { CardItem } = require('./src/components/shared/CardItem');
 
   const mockCard = {
     id: '1',
@@ -35,17 +48,12 @@ jest.mock('./src/components/CardList', () => {
     isLiked: false,
   };
 
-  const CardItem = ({ onPress }) => (
-    <TouchableOpacity testID="card-item" onPress={() => onPress?.(mockCard)} />
-  );
-
   return {
-    CardList: ({ onCardPress }) => (
+    CardList: () => (
       <View>
-        <CardItem onPress={onCardPress} />
+        <CardItem item={mockCard} />
       </View>
     ),
-    __mockOnCardPress: mockOnCardPress,
     __mockCard: mockCard,
   };
 });
