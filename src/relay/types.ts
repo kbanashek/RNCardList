@@ -1,5 +1,11 @@
 import { Card } from "../types/card";
 
+export enum RelayOperation {
+  GET_CARDS = "GetCardsQuery",
+  GET_CARD = "GetCardQuery",
+  TOGGLE_LIKE = "ToggleCardLikeMutation"
+}
+
 export interface GetCardsQuery {
   variables: {};
   response: {
@@ -13,5 +19,18 @@ export interface GetCardQuery {
   };
   response: {
     card: Card;
+  };
+}
+
+export interface ToggleCardLikeMutation {
+  variables: {
+    input: {
+      cardId: string;
+    };
+  };
+  response: {
+    toggleCardLike: {
+      card: Card;
+    };
   };
 }

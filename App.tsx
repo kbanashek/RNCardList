@@ -7,8 +7,8 @@ import environment from "./src/relay/environment";
 import { StatusBar } from "expo-status-bar";
 import { preloadImages } from "./src/assets/images";
 import { Platform, UIManager, View } from "react-native";
-import { NetworkStatus } from "./src/components/NetworkStatus";
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NetworkStatus } from "./src/components/shared/NetworkStatus";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // Enable LayoutAnimation for Android
 if (Platform.OS === "android") {

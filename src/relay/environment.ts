@@ -1,5 +1,6 @@
-import { Environment, Network, RecordSource, Store } from "relay-runtime";
+import { Environment, Network, RecordSource, Store, FetchFunction, RequestParameters } from "relay-runtime";
 import { mockCards } from "./mockData";
+import { RelayOperation, GetCardsQuery, GetCardQuery, ToggleCardLikeMutation } from "./types";
 
 interface Card {
   id: string;
@@ -18,40 +19,51 @@ const store = new Store(recordSource, {
   gcReleaseBufferSize: 10, // Keep more records in memory
 });
 
-const fetchQuery = async (operation: any, variables: any) => {
+type QueryResponse<T> = {
+  data: T;
+};
+
+const fetchQuery: FetchFunction = async (
+  request: RequestParameters,
+  variables: GetCardsQuery["variables"] | GetCardQuery["variables"] | ToggleCardLikeMutation["variables"]
+): Promise<QueryResponse<GetCardsQuery["response"] | GetCardQuery["response"] | ToggleCardLikeMutation["response"]>> => {
   // Mock response based on operation
-  switch (operation.name) {
-    case "GetCardsQuery":
+  switch (request.name) {
+    case RelayOperation.GET_CARDS:
       return {
         data: {
           cards: mockCards,
         },
       };
-    case "GetCardQuery":
-      const card = mockCards.find((card) => card.id === variables.id);
+    case RelayOperation.GET_CARD:
+      const cardVariables = variables as GetCardQuery["variables"];
+      const card = mockCards.find((card) => card.id === cardVariables.id);
+      if (!card) {
+        throw new Error(`Card not found: ${cardVariables.id}`);
+      }
       return {
         data: {
           card,
         },
       };
-    case "ToggleCardLikeMutation": {
-      const { input } = variables;
-      const { cardId } = input;
+    case RelayOperation.TOGGLE_LIKE: {
+      const likeVariables = variables as ToggleCardLikeMutation["variables"];
+      const { cardId } = likeVariables.input;
       const targetCard = mockCards.find((c) => c.id === cardId);
-      if (targetCard) {
-        targetCard.isLiked = !targetCard.isLiked;
-        return {
-          data: {
-            toggleCardLike: {
-              card: targetCard,
-            },
-          },
-        };
+      if (!targetCard) {
+        throw new Error(`Card not found: ${cardId}`);
       }
-      throw new Error(`Card not found: ${cardId}`);
+      targetCard.isLiked = !targetCard.isLiked;
+      return {
+        data: {
+          toggleCardLike: {
+            card: targetCard,
+          },
+        },
+      };
     }
     default:
-      throw new Error(`Unhandled operation: ${operation.name}`);
+      throw new Error(`Unhandled operation: ${request.name}`);
   }
 };
 

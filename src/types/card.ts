@@ -4,7 +4,7 @@ import { CardImageKey } from "../assets/images";
 export interface Card {
   id: string;
   name: string;
-  year: number;
+  year: string;
   team: string;
   description: string;
   imageKey: CardImageKey;

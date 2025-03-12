@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
-import { ActivityIndicator, IconButton, useTheme } from "react-native-paper";
-import { StyleSheet } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { IconButton, ActivityIndicator } from "react-native-paper";
 import { useToggleCardLike } from "../../hooks/useToggleCardLike";
 
 interface LikeButtonProps {
@@ -8,46 +8,35 @@ interface LikeButtonProps {
   isLiked: boolean;
 }
 
-export const LikeButton: React.FC<LikeButtonProps> = React.memo(({
-  cardId,
-  isLiked,
-}) => {
-  const theme = useTheme();
+export const LikeButton: React.FC<LikeButtonProps> = ({ cardId, isLiked }) => {
   const { toggleLike, isCardLoading } = useToggleCardLike();
   const loading = isCardLoading(cardId);
 
-  const handlePress = useCallback(() => {
-    toggleLike(cardId);
-  }, [cardId, toggleLike]);
-
-  if (loading) {
-    return (
-      <ActivityIndicator
-        size={20}
-        color={theme.colors.primary}
-        style={styles.loader}
-      />
-    );
-  }
-
   return (
-    <IconButton
-      icon={isLiked ? "heart" : "heart-outline"}
-      size={20}
-      iconColor={isLiked ? theme.colors.error : theme.colors.onSurfaceVariant}
-      onPress={handlePress}
-      mode="contained-tonal"
-      selected={isLiked}
-    />
+    <View style={styles.container}>
+      <IconButton
+        icon={isLiked ? "heart" : "heart-outline"}
+        onPress={() => toggleLike(cardId)}
+        size={24}
+        style={styles.button}
+        disabled={loading}
+      />
+      {loading && <ActivityIndicator size={20} style={styles.loader} />}
+    </View>
   );
-});
-
-// Display name for debugging
-LikeButton.displayName = 'LikeButton';
+};
 
 const styles = StyleSheet.create({
-  loader: {
+  container: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
     margin: 0,
-    padding: 8,
+  },
+  loader: {
+    position: "absolute",
   },
 });

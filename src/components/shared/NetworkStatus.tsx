@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Surface, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useNetwork } from "../hooks/useNetwork";
+import { useNetwork } from "../../hooks/useNetwork";
 
 export const NetworkStatus: React.FC = () => {
   const { isConnected, isLoading } = useNetwork();

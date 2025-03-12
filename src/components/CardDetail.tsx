@@ -6,7 +6,7 @@ import { CardImageKey, getImage } from "../assets/images";
 import { DetailScreenProps } from "../navigation/types";
 import { GetCardQuery } from "../relay/queries/GetCardQuery";
 import { useToggleCardLike } from "../hooks/useToggleCardLike";
-import { LikeButton } from "./LikeButton";
+import { LikeButton } from "./shared/LikeButton";
 import { CardDetailQuery } from "./__generated__/CardDetailQuery.graphql";
 import { Card } from "../types/card";
 
@@ -69,7 +69,16 @@ const CardDetailContent: React.FC<{ cardId: string }> = ({ cardId }) => {
     );
   }
 
-  const card = useMemo(() => data.card, [data.card]) as Card;
+  const card = useMemo(() => {
+    if (!data.card) return null;
+    return {
+      ...data.card,
+      year: data.card.year.toString()
+    } as Card;
+  }, [data.card]);
+
+  if (!card) return null;
+
   const { imageKey, name, year, team, description, id, isLiked } = card;
 
   return (
@@ -77,8 +86,8 @@ const CardDetailContent: React.FC<{ cardId: string }> = ({ cardId }) => {
       <CardContent
         imageKey={imageKey}
         name={name}
-        year={year.toString()}
-        team={team.toString()}
+        year={year}
+        team={team}
         description={description}
         id={id}
         isLiked={isLiked}
