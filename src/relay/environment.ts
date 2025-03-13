@@ -1,6 +1,18 @@
-import { Environment, Network, RecordSource, Store, FetchFunction, RequestParameters } from "relay-runtime";
+import {
+  Environment,
+  Network,
+  RecordSource,
+  Store,
+  FetchFunction,
+  RequestParameters,
+} from "relay-runtime";
 import { mockCards } from "./mockData";
-import { RelayOperation, GetCardsQuery, GetCardQuery, ToggleCardLikeMutation } from "./types";
+import {
+  RelayOperation,
+  GetCardsQuery,
+  GetCardQuery,
+  ToggleCardLikeMutation,
+} from "./types";
 
 interface Card {
   id: string;
@@ -11,7 +23,6 @@ interface Card {
   isLiked?: boolean;
 }
 
-// Create a RecordSource instance that will be used for caching
 const recordSource = new RecordSource();
 
 // Initialize the Relay store with caching enabled
@@ -25,9 +36,17 @@ type QueryResponse<T> = {
 
 const fetchQuery: FetchFunction = async (
   request: RequestParameters,
-  variables: GetCardsQuery["variables"] | GetCardQuery["variables"] | ToggleCardLikeMutation["variables"]
-): Promise<QueryResponse<GetCardsQuery["response"] | GetCardQuery["response"] | ToggleCardLikeMutation["response"]>> => {
-  // Mock response based on operation
+  variables:
+    | GetCardsQuery["variables"]
+    | GetCardQuery["variables"]
+    | ToggleCardLikeMutation["variables"]
+): Promise<
+  QueryResponse<
+    | GetCardsQuery["response"]
+    | GetCardQuery["response"]
+    | ToggleCardLikeMutation["response"]
+  >
+> => {
   switch (request.name) {
     case RelayOperation.GET_CARDS:
       return {
@@ -72,7 +91,6 @@ const network = Network.create(fetchQuery);
 const environment = new Environment({
   network,
   store,
-  // Enable query caching
   options: {
     fetchTimeout: 30000, // 30 second timeout
     subscriptionResponseCacheConfig: {

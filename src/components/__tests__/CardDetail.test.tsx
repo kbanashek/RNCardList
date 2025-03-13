@@ -6,7 +6,6 @@ import { useLazyLoadQuery } from "react-relay";
 import type { ReactNode } from "react";
 import type { StyleProp, ViewStyle, ImageStyle, TextStyle } from "react-native";
 
-// Mock data
 const mockCard = {
   id: "1",
   name: "Babe Ruth",
@@ -17,7 +16,6 @@ const mockCard = {
   isLiked: false,
 };
 
-// Mock Relay hooks
 jest.mock("react-relay", () => ({
   useLazyLoadQuery: jest.fn(),
   graphql: jest.fn(),
@@ -88,7 +86,6 @@ jest.mock("react-native-paper", () => {
   };
 });
 
-// Mock components
 jest.mock("../shared/LikeButton", () => ({
   LikeButton: ({ cardId, isLiked }: { cardId: string; isLiked: boolean }) => {
     const React = require("react");
@@ -97,7 +94,6 @@ jest.mock("../shared/LikeButton", () => ({
   },
 }));
 
-// Mock useToggleCardLike hook
 const mockToggleLike = jest.fn();
 jest.mock("../../hooks/useToggleCardLike", () => ({
   useToggleCardLike: () => ({
@@ -107,7 +103,6 @@ jest.mock("../../hooks/useToggleCardLike", () => ({
   }),
 }));
 
-// Mock images
 jest.mock("../../assets/images", () => ({
   getImage: (key: string) => ({ uri: `mock-image-${key}.jpg` }),
   CardImageKey: {
@@ -115,7 +110,6 @@ jest.mock("../../assets/images", () => ({
   },
 }));
 
-// Mock react-native
 jest.mock("react-native", () => {
   const React = require("react");
   return {
