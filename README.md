@@ -163,51 +163,6 @@ const LikeButton = ({ cardId, isLiked }) => {
 };
 ```
 
-Key features:
-
-- Immediate UI feedback on press
-- Loading state during request
-- Disabled during loading to prevent duplicate requests
-- Automatic reversion on error
-
-### Shadow Handling
-
-To properly display shadows on Surface and Card components, we use a specific pattern:
-
-```tsx
-// Example from CardItem component
-<PaperCard style={styles.card} mode="elevated" elevation={2}>
-  <View style={styles.cardContent}>{/* Card content */}</View>
-</PaperCard>;
-
-const styles = StyleSheet.create({
-  card: {
-    margin: 16,
-  },
-  cardContent: {
-    overflow: "hidden",
-    borderRadius: 12,
-    paddingBottom: 16,
-  },
-});
-```
-
-This pattern ensures proper shadow rendering by:
-
-1. Keeping elevation on the outer Surface/Card
-2. Wrapping content in a View with overflow handling
-3. Matching border radius between wrapper and card
-
-### Key Features
-
-- **Offline Support**: The app works offline using cached data
-- **Optimistic Updates**: Like/unlike actions are immediate with proper error handling
-- **Image Caching**: Card images are cached for offline viewing
-- **TypeScript**: Full type safety across the codebase
-- **Material Design**: Consistent UI using React Native Paper components
-
-### Testing
-
 #### Optimistic Updates
 
 1. Enable network debugging in Chrome DevTools
