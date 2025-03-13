@@ -20,25 +20,27 @@ const CardContent: React.FC<{
   isLiked: boolean;
 }> = React.memo(({ imageKey, name, year, team, description, id, isLiked }) => (
   <PaperCard style={styles.card} mode="elevated" elevation={2}>
-    <PaperCard.Cover
-      source={getImage(imageKey)}
-      resizeMode="contain"
-      style={styles.image}
-    />
-    <PaperCard.Content>
-      <View style={styles.header}>
-        <Text variant="titleLarge" style={styles.title}>
-          {name}
+    <View style={styles.cardContent}>
+      <PaperCard.Cover
+        source={getImage(imageKey)}
+        resizeMode="contain"
+        style={styles.image}
+      />
+      <PaperCard.Content>
+        <View style={styles.header}>
+          <Text variant="titleLarge" style={styles.title}>
+            {name}
+          </Text>
+          <LikeButton cardId={id} isLiked={isLiked} />
+        </View>
+        <Text variant="bodyMedium" style={styles.subtitle}>
+          {year} {team}
         </Text>
-        <LikeButton cardId={id} isLiked={isLiked} />
-      </View>
-      <Text variant="bodyMedium" style={styles.subtitle}>
-        {year} {team}
-      </Text>
-      <Text variant="bodyMedium" style={styles.description}>
-        {description}
-      </Text>
-    </PaperCard.Content>
+        <Text variant="bodyMedium" style={styles.description}>
+          {description}
+        </Text>
+      </PaperCard.Content>
+    </View>
   </PaperCard>
 ));
 
@@ -73,7 +75,7 @@ const CardDetailContent: React.FC<{ cardId: string }> = ({ cardId }) => {
     if (!data.card) return null;
     return {
       ...data.card,
-      year: data.card.year.toString()
+      year: data.card.year.toString(),
     } as Card;
   }, [data.card]);
 
@@ -128,9 +130,15 @@ const styles = StyleSheet.create({
   },
   card: {
     margin: 16,
-    marginHorizontal: 20,
-    borderRadius: 12,
+  },
+  cardContent: {
     overflow: "hidden",
+    borderRadius: 12,
+    paddingBottom: 16,
+  },
+  image: {
+    height: 400,
+    backgroundColor: "#f5f5f5",
   },
   header: {
     flexDirection: "row",
@@ -138,27 +146,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 20,
-    fontWeight: "600",
     flex: 1,
-    marginRight: 12,
+    marginRight: 8,
   },
   subtitle: {
-    color: "#666",
-    marginTop: 8,
-    marginBottom: 4,
-    fontSize: 16,
+    marginTop: 4,
+    opacity: 0.7,
   },
   description: {
-    color: "#666",
-    marginTop: 12,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  image: {
-    height: 400,
-    marginVertical: 0,
-    backgroundColor: "#f5f5f5",
+    marginTop: 16,
+    lineHeight: 24,
   },
   message: {
     color: "#666",

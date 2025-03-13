@@ -12,15 +12,17 @@ const CardSkeleton = React.memo(() => {
       mode="elevated" 
       elevation={2}
     >
-      <Skeleton height={200} borderRadius={0} />
-      <Card.Content style={styles.content}>
-        <View style={styles.header}>
-          <Skeleton width="70%" height={24} />
-          <Skeleton width={24} height={24} style={styles.icon} />
-        </View>
-        <Skeleton width="100%" height={16} style={styles.description} />
-        <Skeleton width="80%" height={16} />
-      </Card.Content>
+      <View style={styles.cardContent}>
+        <Skeleton height={200} borderRadius={0} />
+        <Card.Content style={styles.content}>
+          <View style={styles.header}>
+            <Skeleton width="70%" height={24} />
+            <Skeleton width={24} height={24} style={styles.icon} />
+          </View>
+          <Skeleton width="100%" height={16} style={styles.description} />
+          <Skeleton width="80%" height={16} />
+        </Card.Content>
+      </View>
     </Card>
   );
 });
@@ -51,14 +53,18 @@ const styles = StyleSheet.create({
   card: {
     margin: 8,
   },
+  cardContent: {
+    overflow: 'hidden',
+    borderRadius: 12,
+  },
   content: {
-    paddingVertical: 16,
+    paddingTop: 16,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   icon: {
     borderRadius: 12,

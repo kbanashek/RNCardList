@@ -20,43 +20,8 @@ if (Platform.OS === "android") {
 }
 
 export default function App() {
-  async function onFetchUpdateAsync() {
-    // Skip update check in Expo Go
-    if (Constants.appOwnership === "expo") {
-      if (__DEV__) {
-        console.log("Update check skipped: Running in Expo Go");
-      }
-      return;
-    }
-
-    try {
-      const update = await Updates.checkForUpdateAsync();
-
-      if (update.isAvailable) {
-        Toast.show({
-          type: "info",
-          text1: "Update Available",
-          text2:
-            "A new update is available. Please restart the app to apply the update.",
-          visibilityTime: 5000,
-        });
-        await Updates.fetchUpdateAsync();
-        await Updates.reloadAsync();
-      }
-    } catch (error) {
-      console.error("Error fetching update:", error);
-      Toast.show({
-        type: "error",
-        text1: "Update Error",
-        text2: `${error}`,
-        visibilityTime: 3000,
-      });
-    }
-  }
-
   useEffect(() => {
     preloadImages();
-    onFetchUpdateAsync();
   }, []);
 
   return (
@@ -69,7 +34,6 @@ export default function App() {
               <NetworkStatus />
             </NavigationContainer>
             <StatusBar style="auto" />
-            <Toast />
           </SafeAreaProvider>
         </PaperProvider>
       </RelayEnvironmentProvider>

@@ -26,25 +26,27 @@ export const CardItem: React.FC<CardItemProps> = React.memo(({ item }) => {
         mode="elevated"
         elevation={2}
       >
-        <PaperCard.Cover
-          source={getImage(item.imageKey)}
-          resizeMode="contain"
-          style={styles.image}
-        />
-        <PaperCard.Content>
-          <View style={styles.header}>
-            <Text variant="titleLarge" style={styles.title}>
-              {item.name}
+        <View style={styles.cardContent}>
+          <PaperCard.Cover
+            source={getImage(item.imageKey)}
+            resizeMode="contain"
+            style={styles.image}
+          />
+          <PaperCard.Content>
+            <View style={styles.header}>
+              <Text variant="titleLarge" style={styles.title}>
+                {item.name}
+              </Text>
+              <LikeButton cardId={item.id} isLiked={item.isLiked} />
+            </View>
+            <Text variant="bodyMedium" style={styles.subtitle}>
+              {item.year} {item.team}
             </Text>
-            <LikeButton cardId={item.id} isLiked={item.isLiked} />
-          </View>
-          <Text variant="bodyMedium" style={styles.subtitle}>
-            {item.year} {item.team}
-          </Text>
-          <Text variant="bodyMedium" style={styles.body}>
-            {item.description.split(". ")[0]}...
-          </Text>
-        </PaperCard.Content>
+            <Text variant="bodyMedium" style={styles.body}>
+              {item.description.split(". ")[0]}...
+            </Text>
+          </PaperCard.Content>
+        </View>
       </PaperCard>
     </TouchableOpacity>
   );
@@ -54,8 +56,11 @@ const styles = StyleSheet.create({
   card: {
     margin: 16,
     marginHorizontal: 20,
-    borderRadius: 12,
+  },
+  cardContent: {
     overflow: "hidden",
+    borderRadius: 12,
+    paddingBottom: 16,
   },
   image: {
     height: 400,
