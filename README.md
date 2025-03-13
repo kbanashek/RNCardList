@@ -15,14 +15,14 @@ A React Native app built with Expo and React Relay for managing a collection of 
 - View list of baseball cards
 - Card details view
 - Like/unlike cards
-- Smooth navigation
 - Optimistic UI updates
 - Offline capabilities
+- Image caching
 
 ## Tech Stack
 
 - React Native
-- Expo
+- Expo/EAS
 - React Relay
 - TypeScript
 - React Navigation
@@ -32,13 +32,13 @@ A React Native app built with Expo and React Relay for managing a collection of 
 
 - Node.js (v18 or higher)
 - npm or yarn
+- Expo CLI
 - iOS Simulator (for iOS development)
   - macOS
   - Xcode (latest version)
 - Android Studio (for Android development)
   - Android SDK
   - Android Emulator
-- Expo Go app (for testing on physical devices)
 
 ## Getting Started
 
