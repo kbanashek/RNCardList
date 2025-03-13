@@ -20,23 +20,32 @@ const CardContent: React.FC<{
   isLiked: boolean;
 }> = React.memo(({ imageKey, name, year, team, description, id, isLiked }) => (
   <PaperCard style={styles.card} mode="elevated" elevation={2}>
-    <View style={styles.cardContent}>
+    <View style={styles.cardContent} testID="card-content">
       <PaperCard.Cover
         source={getImage(imageKey)}
         resizeMode="contain"
         style={styles.image}
+        testID="card-image"
       />
       <PaperCard.Content>
-        <View style={styles.header}>
+        <View style={styles.header} testID="card-header">
           <Text variant="titleLarge" style={styles.title}>
             {name}
           </Text>
           <LikeButton cardId={id} isLiked={isLiked} />
         </View>
-        <Text variant="bodyMedium" style={styles.subtitle}>
+        <Text
+          variant="bodyMedium"
+          style={styles.subtitle}
+          testID="card-subtitle"
+        >
           {year} {team}
         </Text>
-        <Text variant="bodyMedium" style={styles.description}>
+        <Text
+          variant="bodyMedium"
+          style={styles.description}
+          testID="card-description"
+        >
           {description}
         </Text>
       </PaperCard.Content>
@@ -53,7 +62,7 @@ const CardDetailContent: React.FC<{ cardId: string }> = ({ cardId }) => {
 
   if (!data.card) {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} testID="message-container">
         <Text variant="bodyLarge" style={styles.message}>
           Card not found
         </Text>
@@ -63,7 +72,10 @@ const CardDetailContent: React.FC<{ cardId: string }> = ({ cardId }) => {
 
   if (error) {
     return (
-      <View style={[styles.container, styles.centered]}>
+      <View
+        style={[styles.container, styles.centered]}
+        testID="message-container"
+      >
         <Text variant="bodyLarge" style={styles.error}>
           Failed to update like status
         </Text>
@@ -84,7 +96,11 @@ const CardDetailContent: React.FC<{ cardId: string }> = ({ cardId }) => {
   const { imageKey, name, year, team, description, id, isLiked } = card;
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      testID="scroll-view"
+    >
       <CardContent
         imageKey={imageKey}
         name={name}
@@ -99,13 +115,13 @@ const CardDetailContent: React.FC<{ cardId: string }> = ({ cardId }) => {
 };
 
 const LoadingView: React.FC = () => (
-  <View style={[styles.container, styles.centered]}>
-    <ActivityIndicator size="large" />
+  <View style={[styles.container, styles.centered]} testID="loading-container">
+    <ActivityIndicator size="large" testID="loading-indicator" />
   </View>
 );
 
 const ErrorView: React.FC<{ error: Error }> = ({ error }) => (
-  <View style={[styles.container, styles.centered]}>
+  <View style={[styles.container, styles.centered]} testID="message-container">
     <Text variant="bodyLarge" style={styles.error}>
       {error.message}
     </Text>

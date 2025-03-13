@@ -1,6 +1,6 @@
 # RNCardList
 
-A React Native app built with Expo and React Relay for managing a collection of baseball cards. Users can view cards, see detailed information, and like their favorite cards.
+A React Native app built with Expo and React Relay (against a mock service) for managing a collection of baseball cards. Users can view cards, see detailed information, and like their favorite cards.
 
 ## List Screen:
 
@@ -10,48 +10,249 @@ A React Native app built with Expo and React Relay for managing a collection of 
 
 ![alt text](image-1.png)
 
+## Screenshots
+
+### Optimistic UI Updates
+
+The like button demonstrates immediate feedback:
+
+1. Heart icon changes instantly on tap
+2. Loading indicator shows during request
+3. Reverts on error (e.g., when offline)
+
 ## Features
 
 - View list of baseball cards
 - Card details view
-- Like/unlike cards
+- Like/unlike cards with instant feedback
 - Optimistic UI updates
+  - Immediate UI response without waiting for server
+  - Smooth user experience for like/unlike actions
+  - Graceful error handling and state reversion
 - Offline capabilities
 - Image caching
 
 ## Tech Stack
 
-- React Native
-- Expo/EAS
-- React Relay
-- TypeScript
-- React Navigation
-- React Native Paper
+- [React Native](https://reactnative.dev) - A framework for building native apps using React
+- [Expo/EAS](https://expo.dev) - Platform and build service for React Native apps
+- [React Relay](https://relay.dev) - Production-ready GraphQL client for React
+- [TypeScript](https://www.typescriptlang.org) - JavaScript with syntax for types
+- [React Navigation](https://reactnavigation.org) - Routing and navigation for React Native apps
+- [React Native Paper](https://callstack.github.io/react-native-paper) - Material Design components for React Native
 
 ## Prerequisites
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Expo CLI
+- [Node.js](https://nodejs.org) v18 or higher - JavaScript runtime environment
+- [npm](https://www.npmjs.com) or [yarn](https://yarnpkg.com) - Package managers for Node.js
+- [Expo CLI](https://docs.expo.dev/get-started/installation) - Command line tool for Expo development
 - iOS Simulator (for iOS development)
-  - macOS
-  - Xcode (latest version)
+  - macOS - Required for iOS development
+  - Xcode (latest version) - iOS development environment
 - Android Studio (for Android development)
-  - Android SDK
-  - Android Emulator
+  - Android SDK - Software development kit for Android
+  - Android Emulator - Virtual device for testing Android apps
 
 ## Getting Started
 
-1. Install dependencies:
+1. Clone the repository:
 
-```bash
-npm install
+   ```bash
+   git clone https://github.com/kbanashek/RNCardList.git
+   cd RNCardList
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npm start
+   ```
+
+4. Open the app:
+
+   - For iOS: Press `i` in the terminal or run `npm run ios`
+   - For Android: Press `a` in the terminal or run `npm run android`
+
+5. Unit Tests
+
+   ```bash
+   npm run test
+   ```
+
+## Development
+
+The app uses a mock GraphQL service for data. All network requests are handled through Relay, with offline support and optimistic updates.
+
+### Optimistic Updates
+
+The app implements optimistic UI updates to provide instant feedback for user actions:
+
+```typescript
+// Example from useToggleCardLike hook
+commit({
+  variables: { input: { cardId } },
+  // Update UI immediately
+  optimisticResponse: {
+    toggleCardLike: {
+      card: {
+        id: cardId,
+        isLiked: true,
+      },
+    },
+  },
+  // Revert UI if server request fails
+  onError: (error) => {
+    // Handle error state
+  },
+});
 ```
 
-2. Start the development server:
+This pattern:
 
-```bash
-npx expo start
+1. Updates UI immediately when user takes action
+2. Sends request to server in background
+3. Handles errors by reverting UI if needed
+
+#### Implementation Details
+
+The optimistic updates are implemented using React Relay's mutation API:
+
+1. **State Management**:
+
+   ```typescript
+   const [state, setState] = useState<MutationState>({
+     loadingCardIds: new Set(), // Track loading state per card
+     error: null, // Handle errors globally
+   });
+   ```
+
+2. **Loading States**:
+
+   - Each card tracks its own loading state
+   - UI can show loading indicators while request is pending
+   - Prevents duplicate requests for the same card
+
+3. **Error Handling**:
+   - Global error state for user feedback
+   - Automatic UI reversion on failure
+   - Proper cleanup of loading states
+
+#### Component Integration
+
+The `LikeButton` component integrates with the optimistic update system:
+
+```typescript
+const LikeButton = ({ cardId, isLiked }) => {
+  const { toggleLike, isLoading } = useToggleCardLike();
+
+  return (
+    <IconButton
+      icon={isLiked ? "heart" : "heart-outline"}
+      onPress={() => toggleLike(cardId)}
+      disabled={isLoading}
+      // Show loading state while request is pending
+      loading={isLoading}
+    />
+  );
+};
 ```
 
-3. Open the app in Expo Go on your device by scanning the QR code, or press 'i' for iOS simulator / 'a' for Android emulator.
+Key features:
+
+- Immediate UI feedback on press
+- Loading state during request
+- Disabled during loading to prevent duplicate requests
+- Automatic reversion on error
+
+### Shadow Handling
+
+To properly display shadows on Surface and Card components, we use a specific pattern:
+
+```tsx
+// Example from CardItem component
+<PaperCard style={styles.card} mode="elevated" elevation={2}>
+  <View style={styles.cardContent}>{/* Card content */}</View>
+</PaperCard>;
+
+const styles = StyleSheet.create({
+  card: {
+    margin: 16,
+  },
+  cardContent: {
+    overflow: "hidden",
+    borderRadius: 12,
+    paddingBottom: 16,
+  },
+});
+```
+
+This pattern ensures proper shadow rendering by:
+
+1. Keeping elevation on the outer Surface/Card
+2. Wrapping content in a View with overflow handling
+3. Matching border radius between wrapper and card
+
+### Key Features
+
+- **Offline Support**: The app works offline using cached data
+- **Optimistic Updates**: Like/unlike actions are immediate with proper error handling
+- **Image Caching**: Card images are cached for offline viewing
+- **TypeScript**: Full type safety across the codebase
+- **Material Design**: Consistent UI using React Native Paper components
+
+### Testing
+
+#### Optimistic Updates
+
+1. Enable network debugging in Chrome DevTools
+2. Like a card and verify:
+   - UI updates immediately
+   - Network request is sent in background
+   - UI remains updated after request completes
+3. Test error handling:
+   - Enable airplane mode
+   - Like a card
+   - Verify UI reverts when offline
+
+#### Offline Testing
+
+1. Load the app with network connection
+2. Enable airplane mode
+3. Verify:
+   - Cards are still visible
+   - Images load from cache
+   - Like/unlike actions show proper error states
+   - Network status banner appears
+4. Re-enable network:
+   - Banner should disappear
+   - Any pending actions should resolve
+
+### Architecture
+
+#### Offline Support
+
+The app uses several strategies to provide a seamless offline experience:
+
+1. **Data Persistence**:
+
+   - Relay stores query data in memory cache
+   - Images are pre-cached on first load
+   - Network state is monitored via NetInfo
+
+2. **UI Feedback**:
+
+   - Network status banner shows offline state
+   - Loading states indicate pending actions
+   - Error states show when actions fail
+   - Cached data is used when offline
+
+3. **Error Recovery**:
+   - Automatic retry when network returns
+   - Clear error states on reconnection
+   - Preserve user actions when possible

@@ -16,7 +16,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ cardId, isLiked }) => {
     <View style={styles.container}>
       <IconButton
         icon={isLiked ? "heart" : "heart-outline"}
-        onPress={() => toggleLike(cardId)}
+        onPress={() => toggleLike(cardId, isLiked)}
         size={24}
         style={styles.button}
         disabled={loading}

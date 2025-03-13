@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "relay": "relay-compiler",
-    "test": "jest",
+    "test": "jest --detectOpenHandles --forceExit",
     "test:watch": "jest --watch"
   },
   "dependencies": {

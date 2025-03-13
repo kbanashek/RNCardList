@@ -19,7 +19,7 @@ export const useToggleCardLike = () => {
   );
 
   const toggleLike = useCallback(
-    (cardId: string) => {
+    (cardId: string, isCurrentlyLiked: boolean) => {
       setState(prev => ({
         loadingCardIds: new Set(prev.loadingCardIds).add(cardId),
         error: null,
@@ -33,7 +33,7 @@ export const useToggleCardLike = () => {
           toggleCardLike: {
             card: {
               id: cardId,
-              isLiked: true,
+              isLiked: !isCurrentlyLiked,
             },
           },
         },
